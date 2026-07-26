@@ -1,0 +1,63 @@
+# ============================================================
+# GymBud — Render Deployment Configuration
+# ============================================================
+# This file defines the infrastructure-as-code spec for
+# deploying the FastAPI backend to Render.
+#
+# How to use:
+#   1. Push this file to your GitHub repo root
+#   2. Go to Render Dashboard → New → Blueprint
+#   3. Connect your repo — Render reads this file automatically
+#   4. Set the env var values in the Render dashboard
+# ============================================================
+
+services:
+  - type: web
+    name: gymbud-api
+    runtime: python
+    region: oregon                          # or 'frankfurt' for EU
+
+    # ── Build & Start ──
+    buildCommand: |
+      cd backend && pip install -r requirements.txt
+    startCommand: |
+      cd backend && uvicorn app.main:app --host 0.0.0.0 --port $PORT
+
+    # ── Auto-Deploy ──
+    autoDeploy: true                        # Deploy on every push to main
+    branch: main
+
+    # ── Health Check ──
+    healthCheckPath: /health
+    
+    # ── Plan ──
+    plan: free                              # Switch to 'starter' for production
+
+    # ── Environment Variables ──
+    envVars:
+      - key: ENVIRONMENT
+        value: production
+
+      - key: SUPABASE_URL
+        sync: false                         # Set manually in Render dashboard
+
+      - key: SUPABASE_ANON_KEY
+        sync: false
+
+      - key: SUPABASE_SERVICE_ROLE_KEY
+        sync: false
+
+      - key: GEMINI_API_KEY
+        sync: false
+
+      - key: JWT_SECRET
+        generateValue: true                 # Render auto-generates a secure random string
+
+      - key: CORS_ORIGINS
+        value: "http://localhost:8081,https://gymbud-web.vercel.app"
+
+      - key: EXPO_ACCESS_TOKEN
+        sync: false
+
+      - key: PYTHON_VERSION
+        value: "3.11.7"
