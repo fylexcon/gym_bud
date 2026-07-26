@@ -1,0 +1,30 @@
+# ──── GymBud Backend ────────────────────
+backend/.env
+backend/__pycache__/
+backend/**/__pycache__/
+backend/*.pyc
+backend/.venv/
+backend/venv/
+backend/*.egg-info/
+backend/dist/
+backend/build/
+
+# ──── GymBud Mobile ────────────────────
+mobile/node_modules/
+mobile/.expo/
+mobile/dist/
+mobile/web-build/
+mobile/.cache/
+
+# ──── General ──────────────────────────
+.env
+*.log
+.agents/
+.DS_Store
+Thumbs.db
+
+# ──── IDE ──────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
