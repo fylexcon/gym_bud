@@ -1,9 +1,6 @@
 {
   "expo": {
     "newArchEnabled": false,
-    "experiments": {
-      "newArchEnabled": false
-    },
     "name": "GymBud",
     "slug": "gymbud",
     "version": "1.0.0",
@@ -26,21 +23,22 @@
       },
       "package": "com.gymbud.app",
       "permissions": [
-        "CAMERA",
-        "READ_EXTERNAL_STORAGE"
+        "android.permission.CAMERA",
+        "android.permission.READ_EXTERNAL_STORAGE",
+        "android.permission.CAMERA",
+        "android.permission.RECORD_AUDIO"
       ]
     },
     "plugins": [
       "expo-camera",
       "expo-image-picker",
-      [
-        "expo-notifications",
-        {
-          "icon": "./assets/notification-icon.png",
-          "color": "#6C63FF"
-        }
-      ],
+      "expo-notifications",
       "expo-font"
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "ad4ffff2-e95e-4bd8-b3d2-feb8ad46f926"
+      }
+    }
   }
 }
