@@ -33,7 +33,7 @@ function getDevBaseUrl(): string {
 
 const API_BASE_URL = __DEV__
   ? getDevBaseUrl()
-  : 'https://gymbud-api.onrender.com';         // Production Render
+  : 'https://gymbud-api-4ufh.onrender.com';         // Production Render URL
 
 const api = axios.create({
   baseURL: API_BASE_URL,
