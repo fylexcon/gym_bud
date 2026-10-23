@@ -9,7 +9,7 @@ import { ProgramRecord, GeneratedPlan } from '../types/plan';
 
 
 /**
- * Trigger AI plan generation via Gemini 1.5 Flash.
+ * Trigger AI plan generation via Gemini.
  * This is the core endpoint — may take 10-20 seconds.
  */
 export async function generateProgram(

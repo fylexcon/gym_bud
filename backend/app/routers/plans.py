@@ -2,7 +2,7 @@
 GymBud — Plans Router
 
 Handles AI-powered workout plan generation, retrieval, and adaptation.
-POST /generate is the core endpoint that calls Gemini 1.5 Flash.
+POST /generate is the core endpoint that calls Gemini.
 """
 
 from fastapi import APIRouter, HTTPException
@@ -71,7 +71,7 @@ async def generate_program(req: GenerateProgramRequest):
 
     1. Fetches user profile & onboarding photos from Supabase
     2. Fetches recent performance history (if available)
-    3. Sends everything to Gemini 1.5 Flash via `response_schema`
+    3. Sends everything to Gemini via `response_schema`
     4. Stores the structured JSON plan in `generated_programs`
     5. Returns the plan to the client
     """

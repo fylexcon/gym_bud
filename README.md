@@ -1,6 +1,6 @@
 # 💪 GymBud — AI-Powered Fitness Coach
 
-GymBud is a full-stack mobile/web fitness application that uses **Gemini 1.5 Flash** to generate personalized training and nutrition programs based on your physique photos, goals, and performance data.
+GymBud is a full-stack mobile/web fitness application that uses **Gemini** to generate personalized training and nutrition programs based on your physique photos, goals, and performance data.
 
 ## ✨ Features
 
@@ -11,7 +11,7 @@ GymBud is a full-stack mobile/web fitness application that uses **Gemini 1.5 Fla
 - Specify experience level and equipment access
 
 ### 🤖 AI Program Generation
-- Gemini 1.5 Flash analyzes your text profile + visual data
+- Gemini analyzes your text profile + visual data
 - Generates a complete weekly split with advanced techniques (supersets, pre-exhaustion, myo-reps, drop sets)
 - Creates a daily nutrition plan with macro targets, meal templates, and supplement suggestions
 - Provides coaching notes with progression models and deload recommendations
@@ -40,7 +40,7 @@ GymBud is a full-stack mobile/web fitness application that uses **Gemini 1.5 Fla
 | **Backend** | FastAPI (Python 3.13) |
 | **Database** | Supabase (PostgreSQL + Row Level Security) |
 | **Storage** | Supabase Storage (physique photos) |
-| **AI Engine** | Google Gemini 1.5 Flash (structured JSON output) |
+| **AI Engine** | Google Gemini via google-genai (structured JSON output) |
 | **Auth** | Supabase Auth (JWT-based) |
 | **Deployment** | Render (backend), Vercel/EAS (frontend) |
 
@@ -101,7 +101,7 @@ gym_bud/
 │   │   │   ├── daily_log.py # Daily logging + adaptation
 │   │   │   └── fitcheck.py  # Photo upload + AI analysis
 │   │   ├── services/
-│   │   │   ├── gemini_service.py     # Gemini 1.5 Flash integration
+│   │   │   ├── gemini_service.py     # Gemini integration (google-genai)
 │   │   │   └── adaptation_engine.py  # Performance trend analysis
 │   │   └── utils/
 │   │       ├── supabase_client.py    # Supabase client instances
