@@ -641,7 +641,7 @@ function ProfileScreen({ user, onLogout }: { user: UserData; onLogout: () => voi
         </View>
         <View style={[st.profileRow, { borderBottomWidth: 0 }]}>
           <Text style={[st.body, { color: C.textSec, fontSize: 13 }]}>AI Engine</Text>
-          <Text style={[st.body, { fontSize: 13 }]}>Gemini 1.5 Flash</Text>
+          <Text style={[st.body, { fontSize: 13 }]}>Gemini</Text>
         </View>
       </View>
 

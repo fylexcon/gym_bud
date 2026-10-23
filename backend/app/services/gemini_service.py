@@ -1,7 +1,7 @@
 """
-GymBud — Gemini 1.5 Flash Service
+GymBud — Gemini Service
 
-Uses Google's `google-generativeai` SDK with `response_schema` to force
+Uses Google's `google-genai` SDK with `response_schema` to force
 Gemini to return perfectly typed JSON matching our Pydantic models.
 This eliminates the need for regex or manual string parsing.
 
@@ -14,8 +14,8 @@ import json
 import logging
 from typing import Optional
 
-import google.generativeai as genai
-from google.generativeai.types import GenerationConfig
+from google import genai
+from google.genai import types
 from pydantic import BaseModel, Field
 from PIL import Image
 
@@ -24,8 +24,15 @@ from app.config import settings
 logger = logging.getLogger(__name__)
 
 # ─── Initialize the Gemini client ────────────────────────
-genai.configure(api_key=settings.GEMINI_API_KEY)
-model = genai.GenerativeModel("gemini-1.5-flash")
+# Created on first use so the app still starts without GEMINI_API_KEY set.
+_client: genai.Client | None = None
+
+
+def _get_client() -> genai.Client:
+    global _client
+    if _client is None:
+        _client = genai.Client(api_key=settings.GEMINI_API_KEY)
+    return _client
 
 
 # =====================================================================
@@ -173,7 +180,7 @@ async def generate_workout_plan(
     adaptation_context: dict | None = None,
 ) -> dict:
     """
-    Generate a full structured workout and nutrition plan using Gemini 1.5 Flash.
+    Generate a full structured workout and nutrition plan using Gemini.
 
     By passing our Pydantic model into `response_schema`, Gemini is forced to
     return JSON that exactly matches the schema — no regex or string parsing needed.
@@ -216,7 +223,8 @@ Modify the existing plan according to these adjustment reasons rather than gener
         contents.extend(images)
 
     # Enforce strict JSON output matching the Pydantic schema
-    generation_config = GenerationConfig(
+    generation_config = types.GenerateContentConfig(
+        system_instruction=PLAN_SYSTEM_INSTRUCTION,
         response_mime_type="application/json",
         response_schema=GeneratedPlanResponse,
         temperature=0.4,  # Lower temperature for analytical, structured output
@@ -228,10 +236,10 @@ Modify the existing plan according to these adjustment reasons rather than gener
             f"({len(images) if images else 0} photos, "
             f"adaptation={'yes' if adaptation_context else 'no'})"
         )
-        response = model.generate_content(
-            contents,
-            generation_config=generation_config,
-            system_instruction=PLAN_SYSTEM_INSTRUCTION,
+        response = await _get_client().aio.models.generate_content(
+            model=settings.GEMINI_MODEL,
+            contents=contents,
+            config=generation_config,
         )
         result = json.loads(response.text)
         logger.info("✅ Plan generation successful — structured JSON validated by Gemini")
@@ -277,7 +285,8 @@ Analyze the current physique photo and return structured feedback.
     contents.append("TODAY'S FITCHECK PHOTO:")
     contents.append(current_image)
 
-    generation_config = GenerationConfig(
+    generation_config = types.GenerateContentConfig(
+        system_instruction=FITCHECK_SYSTEM_INSTRUCTION,
         response_mime_type="application/json",
         response_schema=FitcheckAnalysisResponse,
         temperature=0.3,
@@ -285,10 +294,10 @@ Analyze the current physique photo and return structured feedback.
 
     try:
         logger.info("Sending fitcheck analysis request to Gemini")
-        response = model.generate_content(
-            contents,
-            generation_config=generation_config,
-            system_instruction=FITCHECK_SYSTEM_INSTRUCTION,
+        response = await _get_client().aio.models.generate_content(
+            model=settings.GEMINI_MODEL,
+            contents=contents,
+            config=generation_config,
         )
         result = json.loads(response.text)
         logger.info("✅ Fitcheck analysis successful")
